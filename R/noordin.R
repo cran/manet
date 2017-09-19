@@ -1,0 +1,11 @@
+#' Noordin Top terrorist network
+#'
+#' The Noordin Top Terrorist Network Data were drawn primarily from "Terrorism in Indonesia: Noordin's Networks," a publication of the International Crisis Group, and include relational data on 79 individuals discussed in that publication. The dataset includes information on these individuals' affiliations with terrorist/insurgent organizations, educational institutions, businesses, and religious institutions.
+#'
+#' \itemize{
+#'   \item 45 events attendended: eight organizations, five operations (bombings), eleven training events, two financial meetings, seven logistic meetings, twelve general meetings
+#'   \item 79 terrorists, as documented in Everton (2012) but including also the five "lone wolves" (last five rows)
+#' }
+#' @format A data frame with 79 rows and 45 variables
+#' @source Everton (2012) Disrupting dark networks 34. Cambridge University Press.
+"noordin"
