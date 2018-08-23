@@ -86,7 +86,6 @@ manet=function(y,K=2,maxT=5000,seed=1,link="min",verbose=FALSE)
     if(any(is.na(prob.z_star))==1) print("FLAG: NA on prob.z")
     prob.z_star=ifelse(is.na(prob.z_star),1/K_star,prob.z_star)
     z_star=t(apply(prob.z_star,1,function(x) {rmultinom(1,1,prob=x)}))
-    # z_star=true.param$z_star
     index=apply(z_star,1,which.max)
 
 
@@ -150,12 +149,9 @@ psi.fun<-function(x,u,link){
 
 ### computes u connection matrix
 z_ext <-function(x,nfac){
-  ## x    : punti di quadratura o pesi
-  ## nfac : numero di fattori
-  nq <- length(x)                           # nr punti di quadratura
-  zx <- hcube(rep(nq,nfac))                 # calcola tutte le possibili disposizioni con ripetizione di 8 elementi presi a gruppi di 3
-  zx <- zx[,dim(zx)[2]:1]                   # zx contiene tutte le disposizioni "rovesciate"
-  z2 <- matrix(x[zx],dim(zx)[1],dim(zx)[2]) # in corrispondenza di ciascuna posizione vado a selezionare il nodo corrispondente. In questo modo
-  # ottengo tutte le possibili combinazioni tra quadrature per ogni fattore latente.
+  nq <- length(x)
+  zx <- hcube(rep(nq,nfac))
+  zx <- zx[,dim(zx)[2]:1]
+  z2 <- matrix(x[zx],dim(zx)[1],dim(zx)[2])
   return(z2)
 }

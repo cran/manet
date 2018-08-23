@@ -9,3 +9,9 @@
 #' @format A data frame with 79 rows and 45 variables
 #' @source Everton (2012) Disrupting dark networks 34. Cambridge University Press.
 "noordin"
+
+#' @examples
+#' data(noordin)
+#' nd<-manet(noordin,K=2,maxT=100)
+#' plot(nd)
+#' summary(nd)

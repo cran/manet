@@ -1,0 +1,62 @@
+#' Concerts synthetic network
+#'
+#'Synthetic data matrix of dimension n x d, recording attendances of n=500 people to d=14 concerts from 14 different artists. There are three clusters in the data, each one corresponding to a community of fans of a specific musical genre. Overlaps of these fandoms point towards attendances dictated by artists playing music from sub-genres - such as electropop.
+#'
+#' \itemize{
+#'   \item 14 concerts attendended: "Blondie", "Fleetwood Mac", "Paramore", "Queen", "St.Vincent", "The Queen", "Pet Shop Boys", "M83", "Daft Punk", "Goldfrapp", "Chvrches", "LaRoux", "Robyn", "BANKS"
+#'   \item 500 attendees
+#' }
+#' @format A data frame with 500 rows and 14 variables
+#'@importFrom mclust adjustedRandIndex classError
+#'@importFrom stats rbinom
+#' @examples
+#'#DATA GENERATION
+#'z_ext <-function(x,nfac){
+#'  nq <- length(x)
+#'  zx <- hcube(rep(nq,nfac))
+#'  zx <- zx[,dim(zx)[2]:1]
+#'  z2 <- matrix(x[zx],dim(zx)[1],dim(zx)[2])
+#'  return(z2)
+#'  }
+#'K=3 # main clusters: Rock (cluster h=5), Pop (cluster h=3), Electronic (cluster h=2)
+#'K_star=2^K
+#'n=500 #attendees
+#'set.seed(777)
+#'u=z_ext(0:1,K)
+#'alpha_star=rep(0,K_star)
+#'alpha_star=c(0.05,0.10,0.35,0.15,0.25,0.00,0.10,0.00)
+#'index=rep(0,n)
+#'for(i in 1:n)
+#'  index[i]=sample(1:K_star,1,prob=alpha_star)
+#'d=14 #concerts/artists
+#'y<-matrix(0,n,d)
+#'colnames(y)=c("Blondie", "Fleetwood Mac", "Paramore","Queen","St.Vincent", "The Queen",
+#'"Pet Shop Boys","M83","Daft Punk", "Goldfrapp", "Chvrches", "LaRoux", "Robyn","BANKS")
+#'pi.greco=matrix(0,K,d)
+#'rownames(pi.greco)=c("Rock","Pop","Electronic")
+#'colnames(pi.greco)=colnames(y)
+#'pi.greco[1,]=c(0.80,0.80,0.80,0.70,0.90,0.80,0.10,0.10,0.05,0.05,0.10,0.05,0.05,0.10)
+#'pi.greco[2,]=c(0.10,0.10,0.90,0.80,0.90,0.80,0.05,0.10,0.05,0.70,0.70,0.05,0.80,0.05)
+#'pi.greco[3,]=c(0.05,0.05,0.05,0.10,0.05,0.05,0.80,0.90,0.90,0.80,0.70,0.80,0.90,0.90)
+#'for (i in 1:n)
+#'for(j in 1:d)
+#'  y[i,j]<-rbinom(1,1,prob=ifelse(sum(u[index[i],])==0,0.00000001,min(pi.greco[,j]^u[index[i],])))
+#'#y is the 500x14 matrix of data
+#'
+#' #RUNNING MANET
+#' \dontrun{
+#' data(concerts)
+#' start=Sys.time()
+#' crt<-manet(concerts,K=3,maxT=5000)
+#' finish=Sys.time()
+#' finish-start
+#' #Time difference of 11.58112 mins
+#' plot(crt)
+#' summary(crt)
+#' alloc<-summary(crt)$actor.allocations[,2]
+#' adjustedRandIndex(index,alloc)
+#' #0.8420733
+#' classError(alloc,index)$errorRate
+#' #0.07
+#' }
+"concerts"
